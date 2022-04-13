@@ -1,4 +1,11 @@
-int servel_tcp(){ //from Idiot Developer
+#include "main.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+
+int main(){ //from Idiot Developer
 
   char *ip = "127.0.0.1";
   int port = 5566;
@@ -31,23 +38,31 @@ int servel_tcp(){ //from Idiot Developer
   listen(server_sock, 5);
   printf("Listening...\n");
 
+  int isConnect = 1;
   while(1){
-    addr_size = sizeof(client_addr);
-    client_sock = accept(server_sock, (struct sockaddr*)&client_addr, &addr_size);
-    printf("[+]Client connected.\n");
-
+    if (isConnect)
+    {
+      addr_size = sizeof(client_addr);
+      client_sock = accept(server_sock, (struct sockaddr*)&client_addr, &addr_size);
+      printf("[+]Client connected.\n");
+      isConnect = 0;
+    }
+    
+    
     bzero(buffer, 1024);
-    recv(client_sock, buffer, sizeof(buffer), 0);
-    printf("Client: %s\n", buffer);
-
-    bzero(buffer, 1024);
-    strcpy(buffer, "HI, THIS IS SERVER. HAVE A NICE DAY!!!");
-    printf("Server: %s\n", buffer);
-    send(client_sock, buffer, strlen(buffer), 0);
-
-    close(client_sock);
-    printf("[+]Client disconnected.\n\n");
-
+    if(!recv(client_sock, buffer, sizeof(buffer), 0))
+    {
+      close(client_sock);
+      isConnect = 1;
+    }
+    else
+    {
+      for (int i = 0; i < 1024; i++)
+      {
+        printf("%c", buffer[i]);
+      }
+      printf("\n");
+    }
   }
 
   return 0;

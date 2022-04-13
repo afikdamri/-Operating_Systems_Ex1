@@ -4,7 +4,8 @@
 #include<sys/wait.h>
 #include<sys/types.h>
 #include<dirent.h>
-#include <unistd.h>
+#include<unistd.h>
+#include"main.h"
 
 void echo(char str[30]){
     for(int i = 4; i < 20; i++){
@@ -119,6 +120,17 @@ int main(){
         }
         else if (strncmp(str, "DELETE", 6) == 0){
             delete(str); // Is a system call or library function ?
+        }
+        else if(strncmp(str, "TCP PORT", 8) == 0)
+        {
+            client_tcp();
+            dup2(1,410);
+            dup2(sock, 1);
+        }
+        else if(strncmp(str, "LOCAL", 5) == 0)
+        {
+            close(sock);
+            dup2(410,1);
         }
         else{
             int id = fork();

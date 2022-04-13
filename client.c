@@ -1,9 +1,16 @@
-int client_tcp(){ //from Idiot Developer
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include"main.h"
+
+void client_tcp(){ //from Idiot Developer
 
   char *ip = "127.0.0.1";
   int port = 5566;
 
-  int sock;
+
   struct sockaddr_in addr;
   socklen_t addr_size;
   char buffer[1024];
